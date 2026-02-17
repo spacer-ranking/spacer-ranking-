@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Spacer Ranking</title>
+    <!-- Красивые шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #121212;
+            font-family: 'Inter', sans-serif;
+            color: #e0e0e0;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 25% 0%, #1f2a2f 0%, #0f0f0f 100%);
+            background-attachment: fixed;
+        }
+
+        .wrapper {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .top-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 8px 16px;
+            border: 1px solid #3a3a3a;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            flex: 1 1 auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #b0b0b0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .tab-btn i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .tab-btn.active {
+            background: #2e3b3f;
+            color: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,200,255,0.2);
+            border: 1px solid #4f6f7a;
+        }
+
+        .tab-btn:hover {
+            background: #2a2a2a;
+            color: #ddd;
+        }
+
+        .user-widget {
+            background: rgba(20, 30, 35, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid #3f5b66;
+            border-radius: 50px;
+            padding: 5px 15px 5px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            color: #cbe7f0;
+        }
+        
+        .online-counter {
+            background: #1b3a45;
+            border-radius: 30px;
+            padding: 3px 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid #5b8c9c;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .online-counter i {
+            color: #6fda6f;
+            font-size: 0.7rem;
+        }
+        
+        .auth-btn {
+            background: #2f4b55;
+            border: none;
+            color: white;
+            padding: 5px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.1s;
+            font-size: 0.9rem;
+        }
+        
+        .auth-btn:hover {
+            background: #3f6370;
+        }
+        
+        .user-greeting {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fade 0.25s ease;
+        }
+
+        .tab-pane.active-pane {
+            display: block;
+        }
+
+        @keyframes fade {
+            0% { opacity: 0.3; transform: translateY(5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(26, 26, 26, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid #3c3c3c;
+            border-radius: 28px;
+            padding: 24px 22px;
+            box-shadow: 0 12px 30px -8px black;
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.9rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+            border-left: 6px solid #5d7e8a;
+            padding-left: 22px;
+            color: #ececec;
+        }
+
+        .teams-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .team-row {
+            background: #1d1d1d;
+            border-radius: 40px;
+            padding: 12px 25px 12px 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border: 1px solid #3b4a4f;
+            transition: 0.1s;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+        }
+
+        .team-row:hover {
+            background: #2a2f32;
+            border-color: #5f8693;
+        }
+
+        .team-rank {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #7f8f96;
+            min-width: 55px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .team-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px 20px;
+        }
+
+        .team-name {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #deeef5;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .team-rating {
+            background: #1f2e33;
+            padding: 4px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid #4a6e7c;
+            color: #bcdae5;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0 auto;
+        }
+
+        .team-rating i {
+            color: #aac9d4;
+            font-size: 0.9rem;
+        }
+
+        .roster-container {
+            margin-top: 14px;
+            background: #1b2124;
+            border-radius: 32px;
+            padding: 18px 25px;
+            border: 1px solid #3e4f55;
+            display: none;
+        }
+
+        .roster-container.open {
+            display: block;
+        }
+
+        .player-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 12px 5px;
+            border-bottom: 1px dashed #3f5057;
+            font-size: 1.1rem;
+        }
+
+        .player-row:last-child {
+            border-bottom: none;
+        }
+
+        .player-name {
+            font-weight: 600;
+            min-width: 140px;
+            color: #cfdee6;
+        }
+
+        .player-name i {
+            color: #7fb6c9;
+            margin-right: 8px;
+        }
+
+        .player-kd {
+            background: #172126;
+            border-radius: 30px;
+            padding: 5px 16px;
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 600;
+            color: #b4e0aa;
+            border: 1px solid #3d6552;
+        }
+
+        .player-role {
+            background: #2b3840;
+            border-radius: 30px;
+            padding: 5px 18px;
+            font-weight: 500;
+            border: 1px solid #5d7e8a;
+            color: #cee7f0;
+        }
+
+        .matches-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .match-item {
+            background: #1d2327;
+            border-radius: 38px;
+            padding: 18px 26px;
+            border: 1px solid #3d555e;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .match-teams {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            color: #cbdbe3;
+        }
+
+        .match-score {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0b1a20;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.9rem;
+            border: 1px solid #54808e;
+            color: #c3efff;
+        }
+
+        .match-winner {
+            background: #28363c;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            border: 1px solid #59828f;
+            color: #b2d9e6;
+        }
+
+        .match-winner i {
+            margin-right: 8px;
+            color: #ffd966;
+        }
+
+        .news-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .news-item {
+            background: #20262b;
+            border-radius: 40px;
+            padding: 24px 30px;
+            border: 1px solid #40565e;
+        }
+
+        .news-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #e1f0f7;
+            margin-bottom: 10px;
+        }
+
+        .news-date {
+            font-size: 1rem;
+            color: #9baeb6;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal.active-modal {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #1e2a2f;
+            border: 2px solid #3f6572;
+            border-radius: 60px;
+            padding: 35px 40px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 30px 50px black;
+            position: relative;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            background: #2a3a40;
+            border-radius: 50px;
+            padding: 5px;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #b0d0da;
+            font-size: 1.3rem;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .auth-tab.active-auth {
+            background: #3f6370;
+            color: white;
+        }
+
+        /* Стили для ошибок */
+        .error-message {
+            background: #4d1f1f;
+            color: #ffb3b3;
+            padding: 12px 18px;
+            border-radius: 40px;
+            margin: 10px 0;
+            font-size: 0.95rem;
+            border: 1px solid #b34545;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: shake 0.2s ease;
+        }
+
+        .error-message i {
+            color: #ff8080;
+            font-size: 1.1rem;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 16px 22px;
+            margin: 8px 0;
+            border-radius: 60px;
+            border: 1px solid #588696;
+            background: #2b3d44;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .modal-content button {
+            width: 100%;
+            padding: 16px 22px;
+            margin: 8px 0;
+            border-radius: 60px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: #326d80;
+            color: white;
+        }
+        
+        .modal-content button:hover {
+            background: #3f889e;
+        }
+        
+        .close-modal {
+            background: #4a3a3a !important;
+        }
+        
+        .code-info {
+            color: #b1d7e3;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .leader-btn {
+            background: #3a636b;
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 20px;
+            border: 1px solid #68a2b5;
+        }
+
+        @media (max-width: 650px) {
+            .wrapper { padding: 8px 12px; }
+            .tab-btn { font-size: 0.95rem; padding: 10px 14px; }
+            .team-rank { font-size: 1.6rem; min-width: 40px; }
+            .team-name { font-size: 1.2rem; }
+            .team-rating { font-size: 1rem; padding: 3px 12px; }
+            .modal-content { padding: 25px; }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #5f747d;
+            border-top: 1px dashed #2a3a40;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Верхняя панель -->
+        <div class="top-bar">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="home"><i class="fas fa-shield-alt"></i>Главная</button>
+                <button class="tab-btn" data-tab="matches"><i class="fas fa-crosshairs"></i>Матчи</button>
+                <button class="tab-btn" data-tab="news"><i class="fas fa-newspaper"></i>Новости</button>
+            </div>
+            <div class="user-widget" id="userWidget">
+                <span class="online-counter"><i class="fas fa-circle"></i> <span id="onlineCount">1</span></span>
+                <span class="user-greeting" id="greetingText">Гость</span>
+                <button class="auth-btn" id="openAuthModalBtn"><i class="fas fa-sign-in-alt"></i> Вход</button>
+            </div>
+        </div>
+
+        <!-- Главная -->
+        <div id="home" class="tab-pane active-pane">
+            <h2><i class="fas fa-trophy"></i> Киберспортивные команды · рейтинг</h2>
+            <div class="card">
+                <div class="teams-grid" id="teamsContainer"></div>
+            </div>
+        </div>
+
+        <!-- Матчи -->
+        <div id="matches" class="tab-pane">
+            <h2><i class="fas fa-clock"></i> История матчей</h2>
+            <div class="card" id="matchesCard">
+                <div class="matches-list" id="matchesContainer"></div>
+                <button class="leader-btn" id="uploadMatchBtn" style="display: none;"><i class="fas fa-upload"></i> Загрузить результат матча</button>
+            </div>
+        </div>
+
+        <!-- Новости -->
+        <div id="news" class="tab-pane">
+            <h2><i class="fas fa-bolt"></i> Последние новости</h2>
+            <div class="card">
+                <div class="news-grid" id="newsContainer"></div>
+            </div>
+        </div>
+
+        <footer>Киберспортивный портал </footer>
+    </div>
+
+    <!-- Модалка авторизации -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <div class="auth-tabs">
+                <button class="auth-tab active-auth" id="loginTabBtn">Вход</button>
+                <button class="auth-tab" id="registerTabBtn">Регистрация</button>
+            </div>
+            
+            <!-- Форма входа -->
+            <div id="loginForm">
+                <div id="loginError" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="loginErrorText">Неверный пароль</span>
+                </div>
+                <input type="text" id="loginName" placeholder="Имя">
+                <input type="password" id="loginPass" placeholder="Пароль">
+                <button id="loginSubmitBtn">Войти</button>
+            </div>
+            
+            <!-- Форма регистрации -->
+            <div id="registerForm" style="display: none;">
+                <div id="registerError" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="registerErrorText">Это имя уже занято</span>
+                </div>
+                <input type="text" id="regName" placeholder="Придумайте имя">
+                <input type="password" id="regPass" placeholder="Пароль">
+                <button id="registerSubmitBtn">Зарегистрироваться</button>
+            </div>
+            
+            <!-- Блок подтверждения кода -->
+            <div id="codeVerificationBlock" style="display: none;">
+                <div id="codeError" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="codeErrorText">Неверный код подтверждения</span>
+                </div>
+                <p class="code-info">Одноразовый код: <strong id="oneTimeCodeDisplay">0000</strong></p>
+                <input type="text" id="codeInput" placeholder="Введите код">
+                <button id="verifyCodeBtn">Подтвердить</button>
+            </div>
+            
+            <button class="close-modal" id="closeAuthModal">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Модалка загрузки матча -->
+    <div id="uploadMatchModal" class="modal">
+        <div class="modal-content">
+            <h3>Загрузить матч</h3>
+            <input type="text" id="matchTeam1" placeholder="Команда 1">
+            <input type="text" id="matchTeam2" placeholder="Команда 2">
+            <input type="text" id="matchScore" placeholder="Счёт (например 13:10)">
+            <input type="text" id="matchWinner" placeholder="Победитель">
+            <button id="saveMatchBtn">Сохранить матч</button>
+            <button class="close-modal" id="closeUploadModal">Отмена</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- ПРОВЕРКА ПОДДЕРЖКИ STORAGE ----------
+            function isStorageAvailable() {
+                try {
+                    const test = 'test';
+                    localStorage.setItem(test, test);
+                    localStorage.removeItem(test);
+                    return true;
+                } catch(e) {
+                    console.warn('localStorage не доступен, используем временное хранилище');
+                    return false;
+                }
+            }
+
+            const storageAvailable = isStorageAvailable();
+            
+            // ---------- ВРЕМЕННОЕ ХРАНИЛИЩЕ (если localStorage не работает) ----------
+            let memoryStorage = {
+                users: [],
+                matches: []
+            };
+
+            // ---------- ЗАГРУЗКА ДАННЫХ ----------
+            function loadUsers() {
+                if (!storageAvailable) return memoryStorage.users;
+                
+                try {
+                    const saved = localStorage.getItem('standoff_users');
+                    if (saved) {
+                        return JSON.parse(saved);
+                    }
+                } catch (e) {
+                    console.error('Ошибка загрузки пользователей:', e);
+                }
+                return [];
+            }
+
+            function saveUsers(users) {
+                if (!storageAvailable) {
+                    memoryStorage.users = users;
+                    return;
+                }
+                
+                try {
+                    localStorage.setItem('standoff_users', JSON.stringify(users));
+                } catch (e) {
+                    console.error('Ошибка сохранения пользователей:', e);
+                }
+            }
+
+            function loadMatches() {
+                if (!storageAvailable) return memoryStorage.matches;
+                
+                try {
+                    const saved = localStorage.getItem('standoff_matches');
+                    return saved ? JSON.parse(saved) : [];
+                } catch (e) {
+                    console.error('Ошибка загрузки матчей:', e);
+                    return [];
+                }
+            }
+            
+            function saveMatches(matches) {
+                if (!storageAvailable) {
+                    memoryStorage.matches = matches;
+                    return;
+                }
+                
+                try {
+                    localStorage.setItem('standoff_matches', JSON.stringify(matches));
+                } catch (e) {
+                    console.error('Ошибка сохранения матчей:', e);
+                }
+            }
+
+            // ---------- ГЛОБАЛЬНЫЕ ДАННЫЕ ----------
+            let currentUser = null;
+            let users = loadUsers();
+            let currentCode = null;
+            let pendingUser = null;
+
+            // Команды (не сохраняются, так как статичны)
+            const teams = [
+                 { id: 1, name: 'ZHANG', rating: 0.20, players: [
+                    { name: 'FA1REXXX', kd: '1.17', role: 'Капитан' },
+                    { name: 'Block', kd: '0.99', role: 'Люрк' },
+                    { name: 'vosmerka', kd: '1.20', role: 'Рифлёр' },
+                    { name: 'nel', kd: '1.10', role: 'Снайпер' },
+                    { name: 'We1qry', kd: '1.12', role: 'Опенфрагер' }
+                ]},
+            ];
+
+            // Матчи
+            let matches = loadMatches();
+
+            // Новости (статические)
+            const news = [
+                { title: 'Открытие сайта', date: '2026-02-17', desc: 'На данном сайте сможете увидеть историю матчей, рейтинг более низких команд и статистику игроков.' },
+                { title: 'Обновление с 1.0v до 1.1v', date: '2026-02-17', desc: 'Была добавлено 1)Индекатор онлайна 2)Функция регестрация и вход в аккаунт 3)Результатов матчей стало проще загружать для основателя.' },
+            ];
+
+            // Онлайн счётчик
+            let onlineCount = 1;
+            function updateOnlineDisplay() {
+                document.getElementById('onlineCount').innerText = onlineCount;
+            }
+            setInterval(() => {
+                onlineCount = Math.max(1, onlineCount + Math.floor(Math.random()*3) -1);
+                updateOnlineDisplay();
+            }, 8000);
+
+            // ---------- ФУНКЦИИ ДЛЯ ОШИБОК ----------
+            function showLoginError(message) {
+                const errorDiv = document.getElementById('loginError');
+                const errorText = document.getElementById('loginErrorText');
+                errorText.innerText = message;
+                errorDiv.style.display = 'flex';
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 3000);
+            }
+
+            function showRegisterError(message) {
+                const errorDiv = document.getElementById('registerError');
+                const errorText = document.getElementById('registerErrorText');
+                errorText.innerText = message;
+                errorDiv.style.display = 'flex';
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 3000);
+            }
+
+            function showCodeError(message) {
+                const errorDiv = document.getElementById('codeError');
+                const errorText = document.getElementById('codeErrorText');
+                errorText.innerText = message;
+                errorDiv.style.display = 'flex';
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 3000);
+            }
+
+            // ---------- РЕНДЕР КОМАНД ----------
+            function renderTeams() {
+                const container = document.getElementById('teamsContainer');
+                const sorted = [...teams].sort((a,b) => b.rating - a.rating);
+                container.innerHTML = '';
+                sorted.forEach((team, index) => {
+                    const rank = index + 1;
+                    const wrapper = document.createElement('div');
+                    wrapper.style.width = '100%';
+                    
+                    const teamRow = document.createElement('div');
+                    teamRow.className = 'team-row';
+                    teamRow.dataset.teamId = team.id;
+                    teamRow.innerHTML = `
+                        <div class="team-rank">#${rank}</div>
+                        <div class="team-info">
+                            <span class="team-name">${team.name}</span>
+                            <span class="team-rating"><i class="fas fa-star"></i> ${team.rating}</span>
+                        </div>
+                    `;
+                    
+                    const roster = document.createElement('div');
+                    roster.className = 'roster-container';
+                    roster.id = `roster-${team.id}`;
+                    team.players.forEach(p => {
+                        const playerRow = document.createElement('div');
+                        playerRow.className = 'player-row';
+                        playerRow.innerHTML = `
+                            <span class="player-name"><i class="fas fa-user-circle"></i> ${p.name}</span>
+                            <span class="player-kd"><i class="fas fa-crosshairs"></i> ${p.kd}</span>
+                            <span class="player-role"><i class="fas fa-helmet-battle"></i> ${p.role}</span>
+                        `;
+                        roster.appendChild(playerRow);
+                    });
+                    
+                    wrapper.appendChild(teamRow);
+                    wrapper.appendChild(roster);
+                    container.appendChild(wrapper);
+                    
+                    teamRow.addEventListener('click', () => {
+                        roster.classList.toggle('open');
+                    });
+                });
+            }
+
+            // ---------- РЕНДЕР МАТЧЕЙ ----------
+            function renderMatches() {
+                const container = document.getElementById('matchesContainer');
+                container.innerHTML = '';
+                
+                if (matches.length === 0) {
+                    container.innerHTML = '<div class="match-item" style="justify-content: center;">Пока нет матчей</div>';
+                    return;
+                }
+                
+                matches.forEach(m => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match-item';
+                    matchDiv.innerHTML = `
+                        <div class="match-teams"><span>${m.team1}</span> vs <span>${m.team2}</span></div>
+                        <div class="match-score">${m.score}</div>
+                        <div class="match-winner"><i class="fas fa-crown"></i> ${m.winner}</div>
+                    `;
+                    container.appendChild(matchDiv);
+                });
+            }
+
+            // ---------- РЕНДЕР НОВОСТЕЙ ----------
+            function renderNews() {
+                const container = document.getElementById('newsContainer');
+                container.innerHTML = '';
+                news.forEach(n => {
+                    const newsDiv = document.createElement('div');
+                    newsDiv.className = 'news-item';
+                    newsDiv.innerHTML = `
+                        <div class="news-title">${n.title}</div>
+                        <div class="news-date"><i class="far fa-calendar-alt"></i> ${n.date}</div>
+                        <div class="news-desc">${n.desc}</div>
+                    `;
+                    container.appendChild(newsDiv);
+                });
+            }
+
+            // ---------- ОБНОВЛЕНИЕ UI ПОЛЬЗОВАТЕЛЯ ----------
+            function updateUserWidget() {
+                const greeting = document.getElementById('greetingText');
+                const authBtn = document.getElementById('openAuthModalBtn');
+                const uploadBtn = document.getElementById('uploadMatchBtn');
+                
+                if (currentUser) {
+                    greeting.innerText = `${currentUser.name} (${currentUser.role})`;
+                    authBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти';
+                    uploadBtn.style.display = currentUser.role === 'Лидер' ? 'inline-block' : 'none';
+                } else {
+                    greeting.innerText = 'Гость';
+                    authBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Вход';
+                    uploadBtn.style.display = 'none';
+                }
+            }
+
+            // Генерация кода
+            function generateCode() {
+                return Math.floor(1000 + Math.random()*9000).toString();
+            }
+
+            // ---------- МОДАЛКА АВТОРИЗАЦИИ ----------
+            const authModal = document.getElementById('authModal');
+            const openBtn = document.getElementById('openAuthModalBtn');
+            const closeBtn = document.getElementById('closeAuthModal');
+            
+            const loginTab = document.getElementById('loginTabBtn');
+            const registerTab = document.getElementById('registerTabBtn');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const codeBlock = document.getElementById('codeVerificationBlock');
+            
+            const loginName = document.getElementById('loginName');
+            const loginPass = document.getElementById('loginPass');
+            const regName = document.getElementById('regName');
+            const regPass = document.getElementById('regPass');
+            const codeInput = document.getElementById('codeInput');
+            const codeDisplay = document.getElementById('oneTimeCodeDisplay');
+            
+            const loginSubmit = document.getElementById('loginSubmitBtn');
+            const registerSubmit = document.getElementById('registerSubmitBtn');
+            const verifyBtn = document.getElementById('verifyCodeBtn');
+
+            // Скрываем ошибки при переключении вкладок
+            function showLogin() {
+                loginTab.classList.add('active-auth');
+                registerTab.classList.remove('active-auth');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                codeBlock.style.display = 'none';
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('registerError').style.display = 'none';
+                document.getElementById('codeError').style.display = 'none';
+            }
+            
+            function showRegister() {
+                registerTab.classList.add('active-auth');
+                loginTab.classList.remove('active-auth');
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
+                codeBlock.style.display = 'none';
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('registerError').style.display = 'none';
+                document.getElementById('codeError').style.display = 'none';
+            }
+            
+            loginTab.addEventListener('click', showLogin);
+            registerTab.addEventListener('click', showRegister);
+
+            openBtn.addEventListener('click', () => {
+                if (currentUser) {
+                    // Выход
+                    currentUser = null;
+                    updateUserWidget();
+                    onlineCount = Math.max(1, onlineCount - 1);
+                    updateOnlineDisplay();
+                } else {
+                    showLogin();
+                    authModal.classList.add('active-modal');
+                }
+            });
+
+            closeBtn.addEventListener('click', () => {
+                authModal.classList.remove('active-modal');
+                showLogin();
+                loginName.value = loginPass.value = regName.value = regPass.value = '';
+                codeInput.value = '';
+            });
+
+            // Регистрация
+            registerSubmit.addEventListener('click', () => {
+                const name = regName.value.trim();
+                const pass = regPass.value.trim();
+                
+                // Скрываем предыдущую ошибку
+                document.getElementById('registerError').style.display = 'none';
+                
+                if (!name || !pass) {
+                    showRegisterError('Заполните все поля');
+                    return;
+                }
+                
+                // Проверка на существующее имя
+                if (users.some(u => u.name === name)) {
+                    showRegisterError('Это имя уже занято! Выберите другое.');
+                    return;
+                }
+                
+                const role = (name === 'Quantum') ? 'Лидер' : 'Игрок';
+                pendingUser = { name, pass, role };
+                
+                currentCode = generateCode();
+                codeDisplay.innerText = currentCode;
+                
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                codeBlock.style.display = 'block';
+            });
+
+            // Вход
+            loginSubmit.addEventListener('click', () => {
+                const name = loginName.value.trim();
+                const pass = loginPass.value.trim();
+                
+                // Скрываем предыдущую ошибку
+                document.getElementById('loginError').style.display = 'none';
+                
+                if (!name || !pass) {
+                    showLoginError('Введите имя и пароль');
+                    return;
+                }
+                
+                const user = users.find(u => u.name === name);
+                if (!user) {
+                    showLoginError('Пользователь не найден');
+                    return;
+                }
+                if (user.pass !== pass) {
+                    showLoginError('Неверный пароль');
+                    return;
+                }
+                
+                pendingUser = user;
+                currentCode = generateCode();
+                codeDisplay.innerText = currentCode;
+                
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                codeBlock.style.display = 'block';
+            });
+
+            // Подтверждение кода
+            verifyBtn.addEventListener('click', () => {
+                // Скрываем предыдущую ошибку кода
+                document.getElementById('codeError').style.display = 'none';
+                
+                if (!codeInput.value) {
+                    showCodeError('Введите код подтверждения');
+                    return;
+                }
+                
+                if (codeInput.value !== currentCode) {
+                    showCodeError('Неверный код подтверждения');
+                    return;
+                }
+                
+                if (!pendingUser) {
+                    showCodeError('Ошибка сессии. Попробуйте снова');
+                    return;
+                }
+                
+                // Код верный
+                const userExists = users.some(u => u.name === pendingUser.name);
+                if (!userExists) {
+                    users.push(pendingUser);
+                    saveUsers(users);
+                }
+                currentUser = pendingUser;
+                updateUserWidget();
+                authModal.classList.remove('active-modal');
+                onlineCount++;
+                updateOnlineDisplay();
+                
+                pendingUser = null;
+                currentCode = null;
+                showLogin();
+                loginName.value = loginPass.value = regName.value = regPass.value = '';
+                codeInput.value = '';
+            });
+
+            // ---------- ЗАГРУЗКА МАТЧА ----------
+            const uploadModal = document.getElementById('uploadMatchModal');
+            const uploadBtn = document.getElementById('uploadMatchBtn');
+            const closeUpload = document.getElementById('closeUploadModal');
+            const saveMatch = document.getElementById('saveMatchBtn');
+            
+            const matchTeam1 = document.getElementById('matchTeam1');
+            const matchTeam2 = document.getElementById('matchTeam2');
+            const matchScore = document.getElementById('matchScore');
+            const matchWinner = document.getElementById('matchWinner');
+
+            uploadBtn.addEventListener('click', () => {
+                if (currentUser?.role === 'Лидер') {
+                    uploadModal.classList.add('active-modal');
+                } else {
+                    alert('Только лидер может загружать матчи');
+                }
+            });
+
+            closeUpload.addEventListener('click', () => {
+                uploadModal.classList.remove('active-modal');
+            });
+
+            saveMatch.addEventListener('click', () => {
+                if (!matchTeam1.value || !matchTeam2.value || !matchScore.value || !matchWinner.value) {
+                    return alert('Заполните все поля');
+                }
+                
+                matches.push({
+                    team1: matchTeam1.value,
+                    team2: matchTeam2.value,
+                    score: matchScore.value,
+                    winner: matchWinner.value
+                });
+                
+                saveMatches(matches);
+                renderMatches();
+                
+                matchTeam1.value = matchTeam2.value = matchScore.value = matchWinner.value = '';
+                uploadModal.classList.remove('active-modal');
+            });
+
+            // ---------- ТАБЫ ----------
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active-pane'));
+                    btn.classList.add('active');
+                    document.getElementById(btn.dataset.tab).classList.add('active-pane');
+                });
+            });
+
+            // Инициализация
+            renderTeams();
+            renderMatches();
+            renderNews();
+            updateUserWidget();
+            updateOnlineDisplay();
+
+            // ---------- СОХРАНЕНИЕ ПРИ ЗАКРЫТИИ (для надежности) ----------
+            window.addEventListener('beforeunload', function() {
+                if (users.length > 0) {
+                    saveUsers(users);
+                }
+                if (matches.length > 0) {
+                    saveMatches(matches);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
